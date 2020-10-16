@@ -74,15 +74,12 @@
         <!-- Div sekcija za PUT formu za kategorije -->
 
         <div id="kategorije_put">
-            <input type="text" name="id_kategorije" id="id_kategorije" placeholder="Unesite ID kategorije">
-
             <input type="text" name="kategorija_naziv_put" id="kategorija_naziv_put" placeholder="Unesite novi naziv kategorije">
         </div>
 
         <!-- Div sekcija za PUT formu za novosti -->
 
         <div id="novosti_put">
-            <input type="text" name="id_novosti" id="id_novosti" placeholder="Unesite ID novosti">
             <input type="text" name="naslov_novosti_put" placeholder="Unesite novi naslov novosti">
             <br>
             <textarea name="tekst_novosti_put" id="tekst_novosti_put" cols="30" rows="10" placeholder="Unesite novi tekst novosti"></textarea>
@@ -222,6 +219,7 @@
     }
 
 
+
     //funkcija posaljiZahtev obrađuje pomoću AJAX-a zahteve koje šaljemo ka serveru
     function posaljiZahtev(){
         //na samom početku nam je bitno da su selektovani i zahtev i tabela
@@ -295,37 +293,29 @@
                             "tekst":$("#tekst_novosti_put").val(),
                             "kategorija_id": parseInt($("#kategorija_odabir_put").val())
                         };
-                        var id = $("input[name=id_novosti").val();
                         console.log(values);
-                        $.put("http://localhost/rest/api/novosti/".concat(id), JSON.stringify(values),function(data){
+                        $.put("http://localhost/rest/api/novosti/".concat(values.kategorija_id), JSON.stringify(values),function(data){
                             alert("Odgovor od servera> "+data['poruka']);
                         });
                     }else{
                         var values ={
                             "kategorija": $("input[name=kategorija_naziv_put]").val(),
                         }
-
-                        var id = $("input[name=id_kategorije").val();
-
                         console.log(values);
-                        $.put("http://localhost/rest/api/kategorije/".concat(id), JSON.stringify(values),function(data){
+                        $.put("http://localhost/rest/api/kategorije", JSON.stringify(values),function(data){
                             alert("Odgovor od servera> "+data['poruka']);
                         });
                         
                     }
-
-
                     break;
                 case "delete":
                     //kod za bonus poene
 
-                    
                     if(tabela=="radio_novosti"){
                         var id = $("input[name=brisanje]").val();
                         
                         console.log(id);
-                        //iz nekog razloga browser nece da mi ode na 8080, ali kad stavim bez
-                        //broja porta radi sve kako treba
+                        
                         var url = "http://localhost/rest/api/novosti/".concat(id);
 
                         $.delete(url, JSON.stringify(values),function(data){
@@ -348,11 +338,11 @@
                     console.log("default");
             }
         }
+
+        
     }
-
-
-            //definicije funkcija za PUT i DELETE
-            $.put = function(url, data, callback, type){       
+        //definicije funkcija za PUT i DELETE
+        $.put = function(url, data, callback, type){       
         if($.isFunction(data)){
             type = type || callback,
             callback = data,
